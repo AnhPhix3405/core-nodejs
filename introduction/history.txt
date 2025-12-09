@@ -31,4 +31,3 @@ Ngoài ra, Node.js trở thành nền tảng chính cho backend của nhiều c�
 **7. Vị trí hiện tại trong hệ sinh thái JavaScript**
 Node.js vẫn giữ vai trò quan trọng trong phát triển web, microservices, tooling (Webpack, ESLint, Vite), DevOps scripts, server-side rendering, và các nền tảng edge runtime.
 
-Nếu bạn muốn, tôi có thể tiếp tục với **timeline cụ thể**, **phân tích kiến trúc sâu**, hoặc **so sánh Node.js với Deno/Bun**.

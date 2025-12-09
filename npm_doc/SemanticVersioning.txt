@@ -39,4 +39,3 @@ Ví dụ:
 * Giúp người dùng npm **biết trước mức độ rủi ro khi cập nhật** package.
 * Dễ dàng quản lý dependency, ví dụ: `"lodash": "^4.17.21"` → tự động cập nhật patch/minor nhưng không nâng major.
 
-Nếu muốn, mình có thể giải thích luôn **cách npm dùng SemVer trong package.json** để quản lý dependency và tự động update, ví dụ `^`, `~` và `*`. Bạn có muốn mình làm không?
