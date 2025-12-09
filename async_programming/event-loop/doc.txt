@@ -1,18 +1,14 @@
-Dưới đây là phân tích chi tiết và chính xác hơn về **cách Event Loop hoạt động trong Node.js**, dựa trên 6 bước bạn đưa ra nhưng mở rộng thêm cho đầy đủ bản chất kỹ thuật của từng giai đoạn.
-
----
-
 # Phân Tích Chi Tiết: How the Event Loop Works
 
 Event Loop trong Node.js được tổ chức thành **các pha (phases)**.
 Mỗi pha xử lý **một loại callback** khác nhau.
 Giữa các pha, Node.js xử lý **microtasks** (Promises, process.nextTick).
 
-Dưới đây là cách hoạt động theo thứ tự:
+!Dưới đây là cách hoạt động theo thứ tự:
 
 ---
 
-## 1. Execute the main script (synchronous code)
+! 1. Execute the main script (synchronous code)
 
 Khi bạn chạy:
 
@@ -30,7 +26,7 @@ Node.js sẽ:
 
 ---
 
-## 2. Process microtasks (Promises, process.nextTick)
+! 2. Process microtasks (Promises, process.nextTick)
 
 Sau mỗi đoạn code sync và **sau mỗi pha** của Event Loop, Node.js xử lý microtasks.
 
@@ -48,7 +44,7 @@ Có 2 nhóm:
 
 ---
 
-## 3. Execute timers (setTimeout, setInterval)
+!3. Execute timers (setTimeout, setInterval)
 
 Pha này xử lý:
 
@@ -65,7 +61,7 @@ Nếu một tác vụ blocking mất 1 giây, `setTimeout(fn, 0)` sẽ chạy **
 
 ---
 
-## 4. Run I/O callbacks (file system, network operations)
+! 4. Run I/O callbacks (file system, network operations)
 
 Pha này xử lý:
 
@@ -82,7 +78,7 @@ Lưu ý:
 
 ---
 
-## 5. Process setImmediate callbacks
+! 5. Process setImmediate callbacks
 
 Callback từ `setImmediate()` được chạy ở pha riêng:
 
@@ -96,7 +92,7 @@ Quy tắc:
 
 ---
 
-## 6. Handle close events
+! 6. Handle close events
 
 Cuối cùng Node.js xử lý các sự kiện “close”:
 
@@ -136,7 +132,7 @@ Cuối cùng Node.js xử lý các sự kiện “close”:
 
 ---
 
-# Kết luận
+! Kết luận
 
 Tóm gọn cách Node.js xử lý:
 

@@ -10,24 +10,40 @@ import fs from 'fs/promises';
     await fs.readFile('../doc.txt','utf-8')
 }
 
-async function conductWithoutPromiseAll(){
+async function excutingWithoutPromiseAll(){
     await a()
     await b()
     await c()
 }
 
-async function conduct(){
+async function excuting(){
     await Promise.all([a(),b(),c()])
 }
 
 // so sanh time giua 2 cach goi ham async
-//* conduct()
-// console.time("conduct")
-// await conduct()
-// console.timeEnd("conduct")
+//* excuting()
+// console.time("excuting")
+// await excuting()
+// console.timeEnd("excuting")
 
 
-// *conductWithoutPromiseAll()
-// console.time("conductWithoutPromiseAll")
-// await conductWithoutPromiseAll()
-// console.timeEnd("conductWithoutPromiseAll")
+// *excutingWithoutPromiseAll()
+// console.time("excutingWithoutPromiseAll")
+// await excutingWithoutPromiseAll()
+// console.timeEnd("excutingWithoutPromiseAll")
+
+// !call back timer se dc goi sau toi thieu 1 giay sau khi dang ky
+async function test(){
+    try{
+        console.log("no content")
+    }
+    catch(e){
+        console.log(e)
+    }
+}
+
+// test()
+
+// setTimeout(() => {
+//     console.log("call callback")
+// }, 1000)
