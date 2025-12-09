@@ -1,0 +1,6 @@
+{
+    "scripts": {
+        "start": "cd lesson1 && nodemon core.js"
+    },
+    "type": "module"
+}

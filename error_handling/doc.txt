@@ -1,0 +1,256 @@
+Node.js phân biệt rõ 2 loại lỗi:
+- Operational Errors (lỗi vận hành bình thường): file không tồn tại, port đã bị chiếm, kết nối mạng mất, v.v. → dự đoán được, cần xử lý bình thường.
+- Programmer Errors (bug trong code): truy cập thuộc tính của undefined, gọi hàm sai tham số, v.v.
+
+! Danh sách ko nên làm: 
+Dưới đây là phân tích đầy đủ và súc tích về từng điểm "Don't" trong danh sách — giải thích vì sao không nên làm và hậu quả kỹ thuật nếu vi phạm.
+
+---
+
+## 1. **Ignore errors (empty catch blocks)**
+
+Ví dụ xấu:
+
+```js
+try {
+  riskyOperation();
+} catch (err) {
+  // ignored
+}
+```
+
+**Vì sao không nên:**
+
+* Ẩn lỗi khiến việc debug gần như không thể.
+* Ứng dụng có thể rơi vào trạng thái không nhất quán.
+* Lỗi vẫn xảy ra nhưng bạn không biết và không ghi log.
+
+**Hậu quả:** Tech debt, bug âm thầm tồn tại, dữ liệu có thể hỏng.
+
+---
+
+## 2. **Expose sensitive error details to clients**
+
+Ví dụ xấu:
+
+```js
+res.status(500).json({ error: err.stack });
+```
+
+**Vì sao không nên:**
+
+* Lộ cấu trúc hệ thống, đường dẫn nội bộ, thông tin DB, stack trace.
+* Tạo cơ hội cho attacker (information leakage).
+
+**Best practice:**
+
+* Log chi tiết lỗi ở server.
+* Trả về message chung chung cho client, ví dụ: `Internal server error`.
+
+---
+
+## 3. **Use try/catch for flow control**
+
+Ví dụ xấu:
+
+```js
+try {
+  JSON.parse(data);
+} catch {
+  return defaultValue;
+}
+```
+
+**Vì sao không nên:**
+
+* try/catch có chi phí cao hơn các nhánh logic chuẩn.
+* Biến xử lý lỗi thành công cụ điều hướng logic, gây khó đọc, khó maintain.
+* Không rõ ràng trong mục đích: error handling hay conditional logic?
+
+**Giải pháp:**
+
+* Dùng các kiểm tra điều kiện thông thường trước.
+* Dùng try/catch *chỉ* khi thực sự cần xử lý lỗi.
+
+---
+
+## 4. **Swallow errors without logging them**
+
+Ví dụ xấu:
+
+```js
+try {
+  doSomething();
+} catch (err) {
+  return null;
+}
+```
+
+**Vì sao không nên:**
+
+* Giống "nuốt lỗi": không log, không xử lý.
+* Debug cực khó vì hệ thống “chết thầm” mà không biết nguyên nhân.
+* Là anti-pattern phổ biến nhất trong Node.js khi dùng Promise.
+
+**Giải pháp:**
+
+* Ghi log bắt buộc.
+* Có chiến lược xử lý tiếp theo rõ ràng.
+
+---
+
+## 5. **Continue execution after unrecoverable errors**
+
+Ví dụ xấu:
+
+```js
+process.on('uncaughtException', err => {
+  console.log(err);
+  // tiếp tục chạy như không có gì xảy ra
+});
+```
+
+**Vì sao không nên:**
+
+* Sau lỗi “fatal”, ứng dụng có thể rơi vào trạng thái không đáng tin cậy.
+* Memory, kết nối, hoặc luồng dữ liệu có thể bị phá vỡ.
+* Rủi ro hỏng dữ liệu hoặc behavior bất định.
+
+**Best practice:**
+
+* Ghi log → đóng server → thoát process (`process.exit(1)`).
+* Để process manager (PM2/Docker/Kubernetes) tự restart.
+
+! Danh sach nhung cach xy error nen lam
+Dưới đây là phân tích đầy đủ và nâng cấp hơn cho từng mục “Do” — giải thích rõ vai trò, lý do và cách áp dụng chuẩn trong hệ thống Node.js/Express hoặc backend hiện đại.
+
+---
+
+# 1. **Handle errors at the appropriate level**
+
+**Ý nghĩa:**
+Xử lý lỗi tại đúng tầng chịu trách nhiệm, thay vì đẩy tất cả lên top-level.
+
+**Vì sao quan trọng:**
+
+* Giảm độ phức tạp.
+* Tách biệt rõ xử lý cho từng loại lỗi (validation, business logic, database, transport).
+* Cho phép mã dễ maintain và dễ dự đoán.
+
+**Ví dụ tốt:**
+
+* Tầng service throw lỗi nghiệp vụ.
+* Tầng controller catch và chuẩn hoá response.
+* Tầng process (uncaughtException/unhandledRejection) chỉ dùng làm *fallback* khi mọi tầng khác fail.
+
+---
+
+# 2. **Log errors with sufficient context**
+
+**Ý nghĩa:**
+Không chỉ log message lỗi; cần log thông tin giúp tái hiện trạng thái hệ thống.
+
+**Context cần log:**
+
+* Request ID / correlation ID
+* User ID hoặc session (nếu phù hợp)
+* Input gây lỗi
+* Timestamp
+* Stack trace
+
+**Lợi ích:**
+
+* Debug nhanh hơn.
+* Dễ truy vết (observability).
+* Dễ tích hợp với logging systems (Winston, pino, ELK).
+
+---
+
+# 3. **Use custom error types for different scenarios**
+
+**Ý nghĩa:**
+Tạo class Error tùy chỉnh: ValidationError, AuthError, DatabaseError, NotFoundError,…
+
+**Lợi ích:**
+
+* Định nghĩa rõ nguyên nhân lỗi và cách xử lý phù hợp.
+* Cho phép hệ thống phân luồng theo loại lỗi.
+* Tránh việc dựa vào string comparisons (anti-pattern).
+
+**Ví dụ:**
+
+```js
+class ValidationError extends Error {
+  constructor(message) {
+    super(message);
+    this.statusCode = 400;
+    this.isOperational = true;
+  }
+}
+```
+
+---
+
+# 4. **Clean up resources in finally blocks**
+
+**Mục tiêu:**
+Đảm bảo mọi tài nguyên đều được giải phóng, ngay cả khi lỗi xảy ra.
+
+**Áp dụng:**
+
+* Đóng connection DB tạm thời
+* Giải phóng file descriptor
+* Unlock mutex
+* Hủy timer
+* Kết thúc session tạm
+
+**Lợi ích:**
+
+* Tránh memory leak
+* Tránh treo tài nguyên trong pool
+* Giữ hệ thống ổn định lâu dài
+
+**Ví dụ:**
+
+```js
+try {
+  await db.connect();
+  await runQuery();
+} finally {
+  await db.disconnect();
+}
+```
+
+---
+
+# 5. **Validate input to catch errors early**
+
+**Ý nghĩa:**
+Chặn lỗi ở rìa hệ thống thay vì để chúng lan vào logic nội bộ.
+
+**Công cụ:**
+
+* Joi
+* Zod
+* Yup
+* Express-validator
+* TypeScript runtime validations
+
+**Lợi ích:**
+
+* Giảm lỗi runtime sâu bên trong hệ thống
+* Bảo vệ API
+* Tránh SQL injection / type mismatch
+* Nâng cao độ tin cậy cho toàn ứng dụng
+
+**Ví dụ:**
+
+```js
+const schema = Joi.object({
+  email: Joi.string().email().required(),
+  age: Joi.number().min(18)
+});
+
+const { error } = schema.validate(req.body);
+if (error) throw new ValidationError(error.details[0].message);
+```

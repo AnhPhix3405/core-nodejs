@@ -1,0 +1,56 @@
+!Key Takeaways
+    ✅ Use async/await for better readability
+    ✅ Always handle errors with try/catch
+    ✅ Run independent operations in parallel with Promise.all
+    ❌ Avoid mixing sync and async code patterns
+    ❌ Don't forget to await promises
+
+!Asynchronous Programming in Node.js
+    Node.js uses an event loop for non-blocking I/O
+    Modern async code uses async/await with Promises
+    Always handle errors in async operations
+    Use Promise.all for parallel operations
+    Avoid callback hell with proper async patterns
+
+!1. Program (chương trình)
+
+Là một file nằm trên ổ đĩa (ví dụ: .exe, .elf, .js, .py…).
+
+Program = tập hợp các chỉ lệnh (instructions) + dữ liệu được lưu trữ.
+Program không chạy, nó chỉ nằm yên trên disk.
+
+!2. Process (tiến trình)
+
+Là một instance đang chạy của một program.
+
+Khi bạn chạy chương trình:
+
+OS tạo ra process
+
+Nạp mã của program vào RAM
+
+Cấp phát stack, heap
+
+Thiết lập context
+
+Quản lý các resource: file descriptor, memory, permissions, scheduling…
+
+Một program có thể tạo ra nhiều process.
+Ví dụ: chạy Chrome 3 lần → 3 process.
+
+Nói đúng:
+→ Process là chương trình đang chạy, có môi trường riêng, tài nguyên riêng.
+
+!3. Thread (luồng)
+
+Thread nằm bên trong một process.
+Nó là dòng thực thi (execution path) của CPU.
+
+Một process có ít nhất 1 thread (main thread).
+
+Một process có thể có nhiều thread (multi-threaded).
+
+Các thread trong cùng một process chia sẻ cùng bộ nhớ, nhưng có stack riêng.
+
+Nói đúng:
+→ Thread là đơn vị nhỏ nhất mà CPU có thể chạy.

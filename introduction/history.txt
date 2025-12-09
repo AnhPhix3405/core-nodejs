@@ -1,0 +1,34 @@
+Below is a clear, structured overview of the history of Node.js.
+
+**1. Khởi nguồn (2009)**
+Node.js được tạo bởi Ryan Dahl vào năm 2009. Mục tiêu của ông là xây dựng một môi trường thực thi JavaScript phía server có khả năng xử lý hàng nghìn kết nối đồng thời mà không bị chặn (non-blocking). Dahl lựa chọn **V8 JavaScript Engine** của Google Chrome vì hiệu năng rất cao.
+
+**2. Kiến trúc nền tảng**
+Node.js áp dụng mô hình **event-driven**, **non-blocking I/O**, dựa trên **libuv** để hỗ trợ event loop đa nền tảng. Kiến trúc này giúp Node.js đặc biệt phù hợp cho các hệ thống mạng quy mô lớn, realtime, hoặc microservices.
+
+**3. Phát triển và cộng đồng (2010–2014)**
+Trong giai đoạn này, Node.js nhanh chóng lan rộng, thúc đẩy sự ra đời của npm (Node Package Manager). npm trở thành hệ sinh thái package lớn nhất thế giới, tạo lợi thế cạnh tranh mạnh mẽ cho Node.js.
+
+**4. Mâu thuẫn quản trị và phân nhánh io.js (2014–2015)**
+Do bất đồng về tốc độ phát triển và cách đóng góp mã nguồn, cộng đồng tách ra thành dự án **io.js**. Dự án này cập nhật nhanh hơn, hỗ trợ ES6/ES2015 sớm hơn Node.js.
+
+**5. Hợp nhất lại và thành lập Node.js Foundation (2015)**
+Năm 2015, Node.js và io.js được hợp nhất dưới sự quản lý của **Node.js Foundation** (sau này hợp nhất với JS Foundation thành **OpenJS Foundation**). Từ đây Node.js có roadmap rõ ràng hơn, bản phát hành ổn định LTS được duy trì thường xuyên.
+
+**6. Giai đoạn trưởng thành (2016–nay)**
+Node.js tiếp tục cải tiến thông qua:
+
+* Hỗ trợ đầy đủ ES6+
+* Async/await (Node 7+)
+* Worker Threads
+* HTTP/2 và sau đó là QUIC/HTTP3
+* Experimental ESM (module ES)
+* Tích hợp Web Streams, Web Crypto
+* Tăng hiệu năng phía server và khả năng mở rộng
+
+Ngoài ra, Node.js trở thành nền tảng chính cho backend của nhiều công ty lớn, đồng thời tạo nền móng cho các framework như Express, NestJS, Next.js backend, Fastify.
+
+**7. Vị trí hiện tại trong hệ sinh thái JavaScript**
+Node.js vẫn giữ vai trò quan trọng trong phát triển web, microservices, tooling (Webpack, ESLint, Vite), DevOps scripts, server-side rendering, và các nền tảng edge runtime.
+
+Nếu bạn muốn, tôi có thể tiếp tục với **timeline cụ thể**, **phân tích kiến trúc sâu**, hoặc **so sánh Node.js với Deno/Bun**.
