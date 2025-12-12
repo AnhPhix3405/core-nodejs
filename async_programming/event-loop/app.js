@@ -47,3 +47,35 @@ async function test(){
 // setTimeout(() => {
 //     console.log("call callback")
 // }, 1000)
+
+// ! call stack example
+// const bar = () => console.log('bar')
+
+// const baz = () => console.log('baz')
+
+// const foo = () => {
+//   console.log('foo')
+//   bar()
+//   baz()
+// }
+
+// foo()
+// ! introduce event loop, microtask, macrotask, event queue, job queue
+const bar = () => console.log('bar')
+
+const baz = () => console.log('baz')
+
+const foo = () => {
+  console.log('foo')
+  setTimeout(bar, 0)
+  // setTimeout is a macrotask so it will be pushed to event queue
+  new Promise((resolve, reject) =>
+    resolve('should be right after baz, before bar')
+  ).then(resolve => console.log(resolve))
+  // promise is a microtask, so it will be pused to job queue
+  baz()
+  // a synchronous function is executed right away
+}
+
+foo()
+
